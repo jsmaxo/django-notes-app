@@ -1,30 +1,91 @@
-# Simple Notes App
-This is a simple notes app built with React and Django.
+# 📝 Django Notes App
 
-## Requirements
-1. Python 3.9
-2. Node.js
-3. React
+A simple Notes application built using **Django** and **React**, containerized with **Docker** and deployed using **Kubernetes**.
 
-## Installation
-1. Clone the repository
+---
+
+## 📌 Overview
+
+This project demonstrates how to deploy a Django-based application using:
+- Docker
+- Kubernetes Namespace
+- Kubernetes Deployment
+- Kubernetes Service
+
+The application can be run either using **Docker** or **Kubernetes**.
+
+---
+
+## ✅ Prerequisites
+
+Make sure the following are installed:
+
+- Docker
+- Kubernetes (Kind)
+- kubectl
+- Git
+
+---
+
+## 🚀 Run Using Docker
+
+### Clone the repository
+
 ```
-git clone https://github.com/LondheShubham153/django-notes-app.git
+git clone https://github.com/jsmaxso/django-notes-app.git
 ```
 
-2. Build the app
+### Build Docker image
 ```
-docker build -t notes-app .
+docker build -t notes-app:latest .
 ```
-
-3. Run the app
+### Run the container
 ```
 docker run -d -p 8000:8000 notes-app:latest
 ```
+### Access the application
+```
+http://localhost:8000
+```
+---
 
-## Nginx
+## ☸️ Run Using Kubernetes ( KIND Cluster)
 
-Install Nginx reverse proxy to make this application available
+### Create a Kind cluster
+```
+kind create cluster --name notes-cluster
 
-`sudo apt-get update`
-`sudo apt install nginx`
+```
+### Load Docker image into Kind cluster
+```
+kind load docker-image notes-app:latest --name notes-cluster
+
+```
+### Apply Kubernetes Namespace
+```
+kubectl apply -f k8s/namespace.yml
+```
+### Deploy the Application
+```
+kubectl apply -f k8s/deployment.yml
+
+```
+### Apply Service
+```
+kubectl apply -f k8s/service.yml
+
+```
+### Access the Application
+Since Kind uses NodePort, use port-forwarding:
+```
+kubectl port-forward svc/notes-app-service 8000:8000 -n notes-app
+
+```
+Open in browser:
+```
+http://localhost:8000
+
+```
+
+
+
